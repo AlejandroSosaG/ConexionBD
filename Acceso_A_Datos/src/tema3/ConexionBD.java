@@ -2,8 +2,10 @@ package tema3;
 
 
 import java.sql.Statement;
+import java.util.Scanner;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -11,7 +13,9 @@ public class ConexionBD {
 	  private static String servidor = "jdbc:mysql://dns11036.phdns11.es";
 	    private static Connection connection;
 	    private static Statement st = null;
+	    public static Scanner sc = new Scanner(System.in);
 	  public static void main(String[] args) {
+		  
 	        try {
 	            Class.forName("com.mysql.cj.jdbc.Driver");
 	            connection = DriverManager.getConnection(servidor,"ad2223","nervion");
@@ -31,7 +35,10 @@ public class ConexionBD {
 	                //listadomedia(st);
 	                //listadoApellidos(st);
 	                //listado8(st);
-	                listado9(st);
+	                //listado9(st)
+	                System.out.println("Escriba la letra");
+	                String letra = sc.nextLine();
+	                mostrarNombreParametro(connection, letra);
 	            }
 	            else {
 	                System.out.println("Conexión fallida");
@@ -43,6 +50,44 @@ public class ConexionBD {
 	            e.printStackTrace();
 	        }
 	    }
+	  
+	  public static void mostrarNombreParametro(Connection con, String nombre) throws SQLException {
+		  PreparedStatement pstmt = connection.prepareStatement("SELECT * from ad2223.asosa WHERE nombre LIKE ? ");
+          pstmt.setString(1, nombre);
+          mostrarTodo(con, pstmt);
+		}
+	  public static void mostrarTodo(Connection con, PreparedStatement pst) throws SQLException{
+	    	ResultSet rs;
+	    	rs = pst.executeQuery();
+	    	while(rs.next()) {
+	    		System.out.println("Nombre: "+rs.getString("Nombre")+" Apellido: "+ rs.getString("Apellidos")+ " Edad: " + rs.getString("Edad"));
+	    	}
+	    }
+	  /*private static String conseguirApellido() {
+	        String letra;
+	        System.out.println("Diga la letra por la que quiere ordenar");
+	        letra = sc.nextLine().toUpperCase();
+	        return letra;
+	    }*/
+	    private static void ordenarPorLetraDada(String conseguirLetra, Statement st, String letraApellido) throws SQLException {
+	        String sql = "SELECT * FROM ad2223.acastro WHERE nombre LIKE '" + conseguirLetra + "%' and apellidos LIKE '" + letraApellido + "%' order by edad";
+	        ResultSet rs = st.executeQuery(sql);
+	        while (rs.next())
+	            System.out.println(rs.getString("nombre") + " " + rs.getString("apellidos") + " " + rs.getString("edad"));
+	    }
+	    /*private static String conseguirNombre() {
+	        String letra;
+	        System.out.println("Diga la letra por la que quiere ordenar");
+	        letra = sc.nextLine().toUpperCase();
+	        return letra;
+	    }*/
+	    
+	  public static void actualizarCloumna(Statement st) {
+		String tabla= "UPDATE ad2223.asosa " +
+				"SET laboral" +
+				"CASE " +
+				");";
+	}
 	  
 	  public static void listado9(Statement st) throws SQLException {
 	    	String list = "SELECT Nombre, Apellidos FROM ad2223.asosa WHERE Edad>65";

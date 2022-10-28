@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ConexionBD {
-	  private static String servidor = "jdbc:mysql://dns11036.phdns11.es";
+	  	private static String servidor = "jdbc:mysql://dns11036.phdns11.es";
 	    private static Connection connection;
 	    private static Statement st = null;
 	    public static Scanner sc = new Scanner(System.in);
